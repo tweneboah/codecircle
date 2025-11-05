@@ -193,6 +193,10 @@ export async function PUT(
       { new: true }
     );
 
+    if (!updatedComment) {
+      return NextResponse.json({ error: 'Comment not found after update' }, { status: 404 });
+    }
+
     // Get updated comment with author info
     const commentWithAuthor = await Comment.aggregate([
       { $match: { _id: updatedComment._id } },

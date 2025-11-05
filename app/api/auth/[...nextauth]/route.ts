@@ -77,7 +77,8 @@ export const authOptions: NextAuthOptions = {
         token.permissions = user.permissions;
         token.username = user.username;
         token.isVerified = user.isVerified;
-        token.emailVerified = user.emailVerified;
+        // Coerce possible union type to boolean to satisfy our JWT typing
+        token.emailVerified = Boolean(user.emailVerified);
       }
       return token;
     },
@@ -95,7 +96,6 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/auth/login',
-    signUp: '/auth/signup',
     error: '/auth/error'
   },
   events: {

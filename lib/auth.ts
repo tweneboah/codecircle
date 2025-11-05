@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { User } from '@/models/User';
+import type { User as NextAuthUser } from 'next-auth';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
 const JWT_EXPIRES_IN = '24h';
@@ -140,9 +141,9 @@ export const getDefaultPermissions = (role: string): string[] => {
 };
 
 // Session utilities
-export const createSession = (user: User) => {
+export const createSession = (user: User): NextAuthUser => {
   return {
-    id: user._id,
+    id: typeof user._id === 'string' ? user._id : (user._id as any)?.toString?.() ?? '',
     email: user.email,
     username: user.profile.username,
     name: user.profile.name,

@@ -9,7 +9,7 @@ import mongoose from 'mongoose';
 // GET /api/user/[userId]/followers - Get user's followers
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  context: { params: Promise<{ userId: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -19,7 +19,7 @@ export async function GET(
 
     await connectDB();
 
-    const { userId } = params;
+    const { userId } = await context.params;
     if (!mongoose.Types.ObjectId.isValid(userId)) {
       return NextResponse.json(
         { error: 'Invalid user ID' },
